@@ -19,27 +19,27 @@ from eval_kinetics import KINETICSclassification
 
 
 ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
-                                       '../results_30_mn/val.json',
+                                       '/home/matthew/Efficient-3DCNNs/test_results_center_mobilenet/val.json',
                                        subset='validation', top_k=1)
 ucf_classification.evaluate()
 print(ucf_classification.hit_at_k)
 
-ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
-                                       '../results_30_sn/val.json',
-                                       subset='validation', top_k=1)
-ucf_classification.evaluate()
-print(ucf_classification.hit_at_k)
+# ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
+#                                        '../results_30_sn/val.json',
+#                                        subset='validation', top_k=1)
+# ucf_classification.evaluate()
+# print(ucf_classification.hit_at_k)
 
-ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
-                                       '../results_30_center_mobilenet/val.json',
-                                       subset='validation', top_k=1)
-ucf_classification.evaluate()
-print(ucf_classification.hit_at_k)
+# ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
+#                                        '../results_30_center_mobilenet/val.json',
+#                                        subset='validation', top_k=1)
+# ucf_classification.evaluate()
+# print(ucf_classification.hit_at_k)
 
-ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
-                                       '../results_30_center_shufflenet/val.json',
-                                       subset='validation', top_k=1)
-ucf_classification.evaluate()
+# ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
+#                                        '../results_30_center_shufflenet/val.json',
+#                                        subset='validation', top_k=1)
+# ucf_classification.evaluate()
 print(ucf_classification.hit_at_k)
 
 
