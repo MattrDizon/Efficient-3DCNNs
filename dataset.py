@@ -1,6 +1,6 @@
-from datasets.kinetics import Kinetics
-from datasets.ucf101 import UCF101
-from datasets.jester import Jester
+from kinetics import Kinetics
+from ucf101 import UCF101
+from jester import Jester
 
 def get_training_set(opt, spatial_transform, temporal_transform,
                      target_transform):
