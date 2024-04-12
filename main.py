@@ -20,6 +20,8 @@ from train import train_epoch
 from validation import val_epoch
 import test
 
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
 
 
 if __name__ == '__main__':
