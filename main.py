@@ -77,7 +77,7 @@ if __name__ == '__main__':
             RandomHorizontalFlip(),
             #RandomRotate(),
             #RandomResize(),
-            # crop_method,
+            crop_method,
             #MultiplyValues(),
             #Dropout(),
             #SaltImage(),

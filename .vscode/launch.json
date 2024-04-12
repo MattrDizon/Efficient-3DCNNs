@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             // Train
             // original (Mobilenet)
-            "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/results_30_mobilenet_nocrop       --dataset ucf101        --n_classes 30  --model mobilenet       --width_mult 0.5        --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1"
+            "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/results_30_mobilenet_nocrop_fix       --dataset ucf101        --n_classes 30  --model mobilenet       --width_mult 0.5        --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1"
             
             // original (Shufflenet)
             // "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/results_30_shufflenet_nocrop    --dataset ucf101        --n_classes 30  --model shufflenet       --width_mult 0.5        --groups 3 --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1"
