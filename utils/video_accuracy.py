@@ -19,7 +19,7 @@ from eval_kinetics import KINETICSclassification
 
 
 ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
-                                       '/home/matthew/Efficient-3DCNNs/test_results_center_mobilenet/val.json',
+                                       '/home/matthew/Efficient-3DCNNs/results_30_shufflenet_nocrop_fix_fin/val.json',
                                        subset='validation', top_k=1)
 ucf_classification.evaluate()
 print(ucf_classification.hit_at_k)
