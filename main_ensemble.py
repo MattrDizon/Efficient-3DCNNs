@@ -19,6 +19,7 @@ from utils import *
 from train import train_epoch
 from validation import val_epoch
 import test
+from opt_sync import *
 
 import warnings
 warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
@@ -26,27 +27,7 @@ warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is
 
 if __name__ == '__main__':
     opt = parse_opts()
-    opt.root_path = '~/'
-    opt.video_path = '~/Thesis/FSL105_jpg_30'
-    opt.annotation_path = '~/Thesis/FSL105_anno_30/ucf101_01.json'
     opt.result_path = 'Efficient-3DCNNs/result_ensemble'
-    opt.dataset = 'ucf101'
-    opt.n_classes = 30
-    opt.width_mult = 0.5
-    opt.train_crop = 'center'
-    opt.learning_rate = 0.1
-    opt.sample_duration = 16
-    opt.downsample = 2
-    opt.batch_size = 64
-    opt.n_threads = 16
-    opt.checkpoint = 1
-    opt.n_val_samples = 1
-    opt.groups = 3
-
-    opt.test = True
-    opt.no_train = True
-    opt.no_val = True
-    opt.crop_position_in_test = 'c'
 
     if opt.root_path != '':
         opt.video_path = os.path.join(opt.root_path, opt.video_path)
@@ -73,24 +54,18 @@ if __name__ == '__main__':
     torch.manual_seed(opt.manual_seed)
     
     opt_mobilenet = lambda: None
-    opt_mobilenet.model = 'mobilenet'
-    opt_mobilenet.n_classes = opt.n_classes
-    opt_mobilenet.sample_size = opt.sample_size
-    opt_mobilenet.width_mult = opt.width_mult
+    opt_shufflenet = lambda: None
 
+    assign_attributes(opt, opt_mobilenet, opt_shufflenet)
+
+    opt_mobilenet.model = 'mobilenet'
+    opt_shufflenet.model = 'shufflenet'
     
-    model_mobilenet, parameters = generate_model(opt)
+    model_mobilenet, parameters_mobilenet = generate_model(opt_mobilenet)
     print("***MobileNet***")
     print(model_mobilenet)
 
-    opt_shufflenet = lambda: None
-    opt_shufflenet.model = 'shufflenet'
-    opt_shufflenet.n_classes = opt.n_classes
-    opt_shufflenet.sample_size = opt.sample_size
-    opt_shufflenet.width_mult = opt.width_mult
-    opt_shufflenet.opt.groups = opt.groups
-
-    model_shufflenet, parameters = generate_model(opt)
+    model_shufflenet, parameters_shufflenet = generate_model(opt_shufflenet)
     print("***ShuffleNet***")
     print(model_shufflenet)
 
@@ -102,23 +77,23 @@ if __name__ == '__main__':
     else:
         norm_method = Normalize(opt.mean, opt.std)
 
-
-    if opt.resume_path:
-        print('loading checkpoint {}'.format(opt.resume_path))
-        checkpoint = torch.load(opt.resume_path)
+    opt_mobilenet.resume_path = '/home/matthew/Efficient-3DCNNs/result_mobilenet/ucf101_mobilenet_0.5x_RGB_16_best.pth'
+    if opt_mobilenet.resume_path:
+        print('loading checkpoint {}'.format(opt_mobilenet.resume_path))
+        opt_mobilenet.checkpoint = torch.load(opt_mobilenet.resume_path)
         # assert opt.arch == checkpoint['arch']
-        opt.begin_epoch = checkpoint['epoch']
-        model_mobilenet.load_state_dict(checkpoint['state_dict'])
+        opt_mobilenet.begin_epoch = opt_mobilenet.checkpoint['epoch']
+        model_mobilenet.load_state_dict(opt_mobilenet.checkpoint['state_dict'])
 
-    if opt.resume_path:
-        print('loading checkpoint {}'.format(opt.resume_path))
-        checkpoint = torch.load(opt.resume_path)
+    model_shufflenet.resume_path = '/home/matthew/Efficient-3DCNNs/results_shufflenet/ucf101_shufflenet_0.5x_RGB_16_best.pth'
+    if model_shufflenet.resume_path:
+        print('loading checkpoint {}'.format(model_shufflenet.resume_path))
+        model_shufflenet.checkpoint = torch.load(model_shufflenet.resume_path)
         # assert opt.arch == checkpoint['arch']
-        opt.begin_epoch = checkpoint['epoch']
-        model_shufflenet.load_state_dict(checkpoint['state_dict'])
+        opt_shufflenet.begin_epoch = model_shufflenet.checkpoint['epoch']
+        model_shufflenet.load_state_dict(model_shufflenet.checkpoint['state_dict'])
 
-
-
+    import pdb; pdb.set_trace()
     print('run')
 
 
