@@ -20,6 +20,8 @@ from train import train_epoch
 from validation import val_epoch
 import test
 
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
 
 
 if __name__ == '__main__':
@@ -83,7 +85,7 @@ if __name__ == '__main__':
             #SpatialElasticDisplacement(),
             ToTensor(opt.norm_value), norm_method
         ])
-        temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+        temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
         target_transform = ClassLabel()
         training_data = get_training_set(opt, spatial_transform,
                                          temporal_transform, target_transform)
@@ -181,7 +183,8 @@ if __name__ == '__main__':
             ToTensor(opt.norm_value), norm_method
         ])
         # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
-        temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+        # temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+        temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
         target_transform = VideoID()
 
         test_data = get_test_set(opt, spatial_transform, temporal_transform,

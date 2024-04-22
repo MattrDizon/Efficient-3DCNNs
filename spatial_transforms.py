@@ -333,10 +333,10 @@ class MultiScaleCornerCrop(object):
         return img.resize((self.size, self.size), self.interpolation)
 
     def randomize_parameters(self):
+        # print("randomizer")
         self.scale = self.scales[random.randint(0, len(self.scales) - 1)]
-        self.crop_position = self.crop_positions[random.randint(
-            0,
-            len(self.scales) - 1)]
+        # self.crop_position = self.crop_positions[random.randint(0,len(self.scales) - 1)]
+        self.crop_position = 'c'
 
 
 class MultiScaleRandomCrop(object):
