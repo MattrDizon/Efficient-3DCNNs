@@ -20,6 +20,7 @@ from train import train_epoch
 from validation import val_epoch
 import test
 from opt_sync import *
+from ensemble import *
 
 import warnings
 warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
@@ -93,31 +94,30 @@ if __name__ == '__main__':
         opt_shufflenet.begin_epoch = model_shufflenet.checkpoint['epoch']
         model_shufflenet.load_state_dict(model_shufflenet.checkpoint['state_dict'])
 
-    import pdb; pdb.set_trace()
+    model = EnsembleModel(model_mobilenet, model_shufflenet, opt.n_classes)
+    
     print('run')
 
+    if opt.test:
+        spatial_transform = Compose([
+            Scale(int(opt.sample_size / opt.scale_in_test)),
+            CornerCrop(opt.sample_size, opt.crop_position_in_test),
+            ToTensor(opt.norm_value), norm_method
+        ])
+        # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
+        # temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
+        temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
+        target_transform = VideoID()
 
-    # Do Not Remove
-    # if opt.test:
-    #     spatial_transform = Compose([
-    #         Scale(int(opt.sample_size / opt.scale_in_test)),
-    #         CornerCrop(opt.sample_size, opt.crop_position_in_test),
-    #         ToTensor(opt.norm_value), norm_method
-    #     ])
-    #     # temporal_transform = LoopPadding(opt.sample_duration, opt.downsample)
-    #     # temporal_transform = TemporalRandomCrop(opt.sample_duration, opt.downsample)
-    #     temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
-    #     target_transform = VideoID()
-
-    #     test_data = get_test_set(opt, spatial_transform, temporal_transform,
-    #                              target_transform)
-    #     test_loader = torch.utils.data.DataLoader(
-    #         test_data,
-    #         batch_size=16,
-    #         shuffle=False,
-    #         num_workers=opt.n_threads,
-    #         pin_memory=True)
-    #     test.test(test_loader, model, opt, test_data.class_names)
+        test_data = get_test_set(opt, spatial_transform, temporal_transform,
+                                 target_transform)
+        test_loader = torch.utils.data.DataLoader(
+            test_data,
+            batch_size=16,
+            shuffle=False,
+            num_workers=opt.n_threads,
+            pin_memory=True)
+        test.test(test_loader, model, opt, test_data.class_names)
 
 
 

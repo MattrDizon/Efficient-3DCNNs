@@ -18,23 +18,31 @@ from eval_kinetics import KINETICSclassification
 # print(ucf_classification.hit_at_k)
 
 # MobileNet
-ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
-                                       '/home/matthew/Efficient-3DCNNs/test_result_mobilenet/val.json',
-                                       subset='validation', top_k=5)
-ucf_classification.evaluate()
-print(ucf_classification.hit_at_k)
+# ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
+#                                        '/home/matthew/Efficient-3DCNNs/test_result_mobilenet/val.json',
+#                                        subset='validation', top_k=5)
+# ucf_classification.evaluate()
+# print(ucf_classification.hit_at_k)
 # top_k=1; 0.2426470588235294
 # top_k=5; 0.75
 
 # ShuffleNet
-ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
-                                       '/home/matthew/Efficient-3DCNNs/test_results_shufflenet/val.json',
-                                       subset='validation', top_k=5)
-ucf_classification.evaluate()
-print(ucf_classification.hit_at_k)
+# ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
+#                                        '/home/matthew/Efficient-3DCNNs/test_results_shufflenet/val.json',
+#                                        subset='validation', top_k=5)
+# ucf_classification.evaluate()
+# print(ucf_classification.hit_at_k)
 # top_k=1; 0.2647058823529412
 # top_k=5; 0.6691176470588235
 
+# Ensemble
+ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
+                                       '/home/matthew/Efficient-3DCNNs/result_ensemble/val.json',
+                                       subset='validation', top_k=5)
+ucf_classification.evaluate()
+print(ucf_classification.hit_at_k)
+# top_k=1; 0.029411764705882353
+# top_k=5; 0.08088235294117647
 
 
 
