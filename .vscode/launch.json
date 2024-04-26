@@ -11,10 +11,10 @@
             "program": "${file}",
             "console": "integratedTerminal",
             // Train MobileNet
-            // "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/result_mobilenet       --dataset ucf101        --n_classes 30  --model mobilenet       --width_mult 0.5        --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1"
+            // "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/result_mobilenet_100_frames       --dataset ucf101        --n_classes 30  --model mobilenet       --width_mult 0.5        --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1"
             
             // Train ShuffleNet
-            // "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/results_shufflenet    --dataset ucf101        --n_classes 30  --model shufflenet       --width_mult 0.5        --groups 3 --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1"
+            "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/results_shufflenet_100_frames    --dataset ucf101        --n_classes 30  --model shufflenet       --width_mult 0.5        --groups 3 --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1"
 
             // --test --no_train --no_val --crop_position_in_test c --resume_path 
 
@@ -22,7 +22,7 @@
             // "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/test_result_mobilenet       --dataset ucf101        --n_classes 30  --model mobilenet       --width_mult 0.5        --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1 --test --no_train --no_val --crop_position_in_test c --resume_path /home/matthew/Efficient-3DCNNs/result_mobilenet/ucf101_mobilenet_0.5x_RGB_16_best.pth"
             
             // Train ShuffleNet - Ensemble
-            "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/test_results_shufflenet    --dataset ucf101        --n_classes 30  --model shufflenet       --width_mult 0.5        --groups 3 --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1 --test --no_train --no_val --crop_position_in_test c --resume_path /home/matthew/Efficient-3DCNNs/results_shufflenet/ucf101_shufflenet_0.5x_RGB_16_best.pth"
+            // "args": "--root_path ~/     --video_path ~/Thesis/FSL105_jpg_30     --annotation_path ~/Thesis/FSL105_anno_30/ucf101_01.json       --result_path Efficient-3DCNNs/test_results_shufflenet    --dataset ucf101        --n_classes 30  --model shufflenet       --width_mult 0.5        --groups 3 --train_crop center     --learning_rate 0.1    --sample_duration 16    --downsample 2  --batch_size 64         --n_threads 16  --checkpoint 1  --n_val_samples 1 --test --no_train --no_val --crop_position_in_test c --resume_path /home/matthew/Efficient-3DCNNs/results_shufflenet/ucf101_shufflenet_0.5x_RGB_16_best.pth"
 
         }
     ]
