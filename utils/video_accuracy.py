@@ -20,16 +20,12 @@ from eval_kinetics import KINETICSclassification
 # MobileNet
 ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
                                        '/home/matthew/Efficient-3DCNNs/result_mobilenet_test/val.json',
-                                       subset='validation', top_k=1)
+                                       subset='validation', top_k=5)
 ucf_classification.evaluate()
 print(ucf_classification.hit_at_k)
 # 60 Frames
 # top_k=1; 0.2426470588235294
 # top_k=5; 0.75
-
-# 30 Frames
-# top_k=1; 0.19852941176470587
-# top_k=5;
 
 # ShuffleNet
 ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
@@ -41,10 +37,6 @@ print(ucf_classification.hit_at_k)
 # top_k=1; 0.2647058823529412
 # top_k=5; 0.6691176470588235
 
-# 30 Frames
-# top_k=1; 0.22794117647058823
-# top_k=5;
-
 # Ensemble
 ucf_classification = UCFclassification('../annotation_FSL105_30/ucf101_01.json',
                                        '/home/matthew/Efficient-3DCNNs/result_ensemble/val.json',
@@ -54,7 +46,3 @@ print(ucf_classification.hit_at_k)
 # 60 Frames
 # top_k=1; 0.029411764705882353
 # top_k=5; 0.08088235294117647
-
-# 30 Frames
-# top_k=1; 0.022058823529411766
-# top_k=5; 
