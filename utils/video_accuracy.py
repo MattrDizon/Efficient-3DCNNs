@@ -28,7 +28,7 @@ print(ucf_classification.hit_at_k)
 # top_k=5; 0.75
 
 # 30 Frames
-# top_k=1;
+# top_k=1; 0.19852941176470587
 # top_k=5;
 
 # ShuffleNet
@@ -42,7 +42,7 @@ print(ucf_classification.hit_at_k)
 # top_k=5; 0.6691176470588235
 
 # 30 Frames
-# top_k=1;
+# top_k=1; 0.22794117647058823
 # top_k=5;
 
 # Ensemble
@@ -56,5 +56,5 @@ print(ucf_classification.hit_at_k)
 # top_k=5; 0.08088235294117647
 
 # 30 Frames
-# top_k=1; 
+# top_k=1; 0.022058823529411766
 # top_k=5; 
