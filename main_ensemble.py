@@ -28,7 +28,7 @@ warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is
 
 if __name__ == '__main__':
     opt = parse_opts()
-    opt.result_path = 'Efficient-3DCNNs/result_ensemble'
+    opt.result_path = 'Efficient-3DCNNs/result_ensemble_test'
 
     if opt.root_path != '':
         opt.video_path = os.path.join(opt.root_path, opt.video_path)
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     else:
         norm_method = Normalize(opt.mean, opt.std)
 
-    opt_mobilenet.resume_path = '/home/matthew/Efficient-3DCNNs/result_mobilenet/ucf101_mobilenet_0.5x_RGB_16_best.pth'
+    opt_mobilenet.resume_path = '/home/matthew/Efficient-3DCNNs/x1.0/result_mobilenet/ucf101_mobilenet_1.0x_RGB_16_best.pth'
     if opt_mobilenet.resume_path:
         print('loading checkpoint {}'.format(opt_mobilenet.resume_path))
         opt_mobilenet.checkpoint = torch.load(opt_mobilenet.resume_path)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         opt_mobilenet.begin_epoch = opt_mobilenet.checkpoint['epoch']
         model_mobilenet.load_state_dict(opt_mobilenet.checkpoint['state_dict'])
 
-    model_shufflenet.resume_path = '/home/matthew/Efficient-3DCNNs/results_shufflenet/ucf101_shufflenet_0.5x_RGB_16_best.pth'
+    model_shufflenet.resume_path = '/home/matthew/Efficient-3DCNNs/x1.0/results_shufflenet/ucf101_shufflenet_1.0x_RGB_16_best.pth'
     if model_shufflenet.resume_path:
         print('loading checkpoint {}'.format(model_shufflenet.resume_path))
         model_shufflenet.checkpoint = torch.load(model_shufflenet.resume_path)

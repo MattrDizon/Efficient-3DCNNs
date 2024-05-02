@@ -9,11 +9,11 @@ class EnsembleModel(nn.Module):
         self.modelA = modelA
         self.modelB = modelB
         self.classifier = nn.Linear(2*num_features, num_features)
+        self.cuda()
         
     def forward(self, x):
         x1 = self.modelA(x)
         x2 = self.modelB(x)
         x = torch.cat((x1, x2), dim=1)
-        self.cuda()
         x = self.classifier(F.relu(x))
         return x
