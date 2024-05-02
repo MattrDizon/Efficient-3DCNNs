@@ -120,6 +120,8 @@ if __name__ == '__main__':
             pin_memory=True)
         test.test(test_loader, model, opt, test_data.class_names)
 
+    import torchvision
+    from torchview import draw_graph
 
-
-
+    model_graph = draw_graph(model, expand_nested=True)
+    model_graph.visual_graph
