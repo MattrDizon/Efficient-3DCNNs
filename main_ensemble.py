@@ -28,7 +28,7 @@ warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is
 
 if __name__ == '__main__':
     opt = parse_opts()
-    opt.result_path = 'Efficient-3DCNNs/result_ensemble_test'
+    # opt.result_path = 'Efficient-3DCNNs/result_ensemble_test'
 
     if opt.root_path != '':
         opt.video_path = os.path.join(opt.root_path, opt.video_path)
@@ -64,11 +64,11 @@ if __name__ == '__main__':
     
     model_mobilenet, parameters_mobilenet = generate_model(opt_mobilenet)
     print("***MobileNet***")
-    print(model_mobilenet)
+    # print(model_mobilenet)
 
     model_shufflenet, parameters_shufflenet = generate_model(opt_shufflenet)
     print("***ShuffleNet***")
-    print(model_shufflenet)
+    # print(model_shufflenet)
 
 
     if opt.no_mean_norm and not opt.std_norm:
@@ -97,6 +97,8 @@ if __name__ == '__main__':
     model = EnsembleModel(model_mobilenet, model_shufflenet, opt.n_classes)
     
     print('run')
+    pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print("Total number of trainable parameters: ", pytorch_total_params)
     print(model)
 
     if opt.test:

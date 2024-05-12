@@ -80,8 +80,8 @@ if __name__ == '__main__':
             crop_method,
             #MultiplyValues(),
             #Dropout(),
-            #SaltImage(),
-            #Gaussian_blur(),
+            # SaltImage(),
+            # Gaussian_blur(),
             #SpatialElasticDisplacement(),
             ToTensor(opt.norm_value), norm_method
         ])
