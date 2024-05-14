@@ -232,7 +232,7 @@ if __name__ == '__main__':
             pin_memory=True)
         test.test(test_loader, model, opt, test_data.class_names)
     
-    flops(model)
+    # flops(model)
     # flops(model_mobilenet)
     # flops(model_shufflenet)
 

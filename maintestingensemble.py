@@ -21,10 +21,15 @@ from validation import val_epoch
 from ensemble import *
 import test
 from opt_sync import *
+from thop import profile
 
 import warnings
 warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
 
+def flops(model):
+    flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
+    print("Total number of FLOPs: ", flops)
+    print(prms)
 
 if __name__ == '__main__':
     opt = parse_opts()
@@ -220,6 +225,9 @@ if __name__ == '__main__':
             pin_memory=True)
         test.test(test_loader, model, opt, test_data.class_names)
 
-
+    pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print("Total number of trainable parameters: ", pytorch_total_params)
+    print(model)
+    flops(model)
 
 
