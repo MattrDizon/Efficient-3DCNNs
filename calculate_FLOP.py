@@ -1,6 +1,8 @@
+import torch
 import torch.nn as nn
 from thop import profile
 from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2, c3d, resnext, resnet
+device = torch.device("cuda:0")
 
 # %%%%%%%%--------------------- SELECT THE MODEL BELOW ---------------------%%%%%%%%
 
@@ -27,7 +29,8 @@ from models import squeezenet, shufflenetv2, shufflenet, mobilenet, mobilenetv2,
 # model = resnet.resnet101( num_classes=600, shortcut_type='A', sample_size=112, sample_duration=16)
 model = c3d.get_model( num_classes=600, sample_size=112, sample_duration=16)
 model = model.cuda()
-model = nn.DataParallel(model, device_ids=None)	
+model = nn.DataParallel(model, device_ids=None).to(device)
+model.cuda()
 print(model)
 
 pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)

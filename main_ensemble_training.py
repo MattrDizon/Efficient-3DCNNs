@@ -26,12 +26,6 @@ from thop import profile
 import warnings
 warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
 
-
-def flops(model):
-    flops, prms = profile(model, input_size=(1, 3, 16, 112, 112))
-    print("Total number of FLOPs: ", flops)
-    print(prms)
-
 if __name__ == '__main__':
     opt = parse_opts()
     # opt.result_path = 'Efficient-3DCNNs/result_ensemble_test'
@@ -76,6 +70,10 @@ if __name__ == '__main__':
     # print("***ShuffleNet***")
     # print(model_shufflenet)
 
+    criterion = nn.CrossEntropyLoss()
+    if not opt.no_cuda:
+        criterion = criterion.cuda()
+
 
     if opt.no_mean_norm and not opt.std_norm:
         norm_method = Normalize([0, 0, 0], [1, 1, 1])
@@ -83,6 +81,7 @@ if __name__ == '__main__':
         norm_method = Normalize(opt.mean, [1, 1, 1])
     else:
         norm_method = Normalize(opt.mean, opt.std)
+
 
     opt_mobilenet.resume_path = '/home/matthew/Efficient-3DCNNs_epoch100/result_mobilenet_bs16_lr0.1/ucf101_mobilenet_0.5x_RGB_16_best.pth'
     if opt_mobilenet.resume_path:
@@ -102,10 +101,115 @@ if __name__ == '__main__':
 
     model = EnsembleModel(model_mobilenet, model_shufflenet, opt.n_classes)
     
+    if not opt.no_train:
+        assert opt.train_crop in ['random', 'corner', 'center']
+        if opt.train_crop == 'random':
+            crop_method = MultiScaleRandomCrop(opt.scales, opt.sample_size)
+        elif opt.train_crop == 'corner':
+            crop_method = MultiScaleCornerCrop(opt.scales, opt.sample_size)
+        elif opt.train_crop == 'center':
+            crop_method = MultiScaleCornerCrop(
+                opt.scales, opt.sample_size, crop_positions=['c'])
+        spatial_transform = Compose([
+            RandomHorizontalFlip(),
+            #RandomRotate(),
+            #RandomResize(),
+            crop_method,
+            #MultiplyValues(),
+            #Dropout(),
+            # SaltImage(),
+            # Gaussian_blur(),
+            #SpatialElasticDisplacement(),
+            ToTensor(opt.norm_value), norm_method
+        ])
+        temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
+        target_transform = ClassLabel()
+        training_data = get_training_set(opt, spatial_transform,
+                                         temporal_transform, target_transform)
+        train_loader = torch.utils.data.DataLoader(
+            training_data,
+            batch_size=opt.batch_size,
+            shuffle=True,
+            num_workers=opt.n_threads,
+            pin_memory=True)
+        train_logger = Logger(
+            os.path.join(opt.result_path, 'train.log'),
+            ['epoch', 'loss', 'prec1', 'prec5', 'lr'])
+        train_batch_logger = Logger(
+            os.path.join(opt.result_path, 'train_batch.log'),
+            ['epoch', 'batch', 'iter', 'loss', 'prec1', 'prec5', 'lr'])
+
+        if opt.nesterov:
+            dampening = 0
+        else:
+            dampening = opt.dampening
+        optimizer = optim.SGD(
+            model.parameters(),
+            lr=opt.learning_rate,
+            momentum=opt.momentum,
+            dampening=dampening,
+            weight_decay=opt.weight_decay,
+            nesterov=opt.nesterov)
+        scheduler = lr_scheduler.ReduceLROnPlateau(
+            optimizer, 'min', patience=opt.lr_patience)
+    if not opt.no_val:
+        spatial_transform = Compose([
+            Scale(opt.sample_size),
+            CenterCrop(opt.sample_size),
+            ToTensor(opt.norm_value), norm_method
+        ])
+        #temporal_transform = LoopPadding(opt.sample_duration)
+        temporal_transform = TemporalCenterCrop(opt.sample_duration, opt.downsample)
+        target_transform = ClassLabel()
+        validation_data = get_validation_set(
+            opt, spatial_transform, temporal_transform, target_transform)
+        val_loader = torch.utils.data.DataLoader(
+            validation_data,
+            batch_size=16,
+            shuffle=False,
+            num_workers=opt.n_threads,
+            pin_memory=True)
+        val_logger = Logger(
+            os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'prec1', 'prec5'])
+
+    print('run')
+    for i in range(opt.begin_epoch, opt.n_epochs + 1):
+
+        if not opt.no_train:
+            adjust_learning_rate(optimizer, i, opt)
+            train_epoch(i, train_loader, model, criterion, optimizer, opt,
+                        train_logger, train_batch_logger)
+            state = {
+                'epoch': i,
+                'arch': opt.arch,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'best_prec1': best_prec1
+                }
+            save_checkpoint(state, False, opt)
+            
+        if not opt.no_val:
+            validation_loss, prec1 = val_epoch(i, val_loader, model, criterion, opt,
+                                        val_logger)
+            is_best = prec1 > best_prec1
+            best_prec1 = max(prec1, best_prec1)
+            state = {
+                'epoch': i,
+                'arch': opt.arch,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'best_prec1': best_prec1
+                }
+            save_checkpoint(state, is_best, opt)
+
+
+
     print('run')
     pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print("Total number of trainable parameters: ", pytorch_total_params)
     print(model)
+
+
 
     if opt.test:
         spatial_transform = Compose([
